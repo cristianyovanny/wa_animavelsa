@@ -13,7 +13,7 @@ class MessageHandler {
             const incomingMessage = message.text.body.toLowerCase().trim();
             console.log("Incoming message:", incomingMessage);
 
-            if(this.isGretting(incomingMessage)) {
+            if(this.isGreeting(incomingMessage)) {
                 await this.sendWelcomeMessage(message.from, message.id, senderInfo);
                 await this.sendWelcomeMenu(message.from);
             } else if (incomingMessage === 'media') {
@@ -33,7 +33,7 @@ class MessageHandler {
         }
     }
 
-    isGretting(message) {
+    isGreeting(message) {
         const greetings = ["hi", "hello", "hey"];
         return greetings.includes(message);
     }
@@ -48,7 +48,7 @@ class MessageHandler {
 
     async sendWelcomeMessage(to, messageId, senderInfo) {
         const profile = this.getSenderInfo(senderInfo);
-        const welcomeMessage = `Hola ${ profile.first_name || profile.last_name || "" }, bienvenido a Medpet! En que puedo ayudarte?`;
+        const welcomeMessage = `Hola ${ profile.first_name || profile.last_name || "" }, bienvenido a Animavelsa! En que puedo ayudarte?`;
         await whatsappService.sendMessage(to, welcomeMessage, messageId);
     }
     

@@ -1,4 +1,4 @@
-import config from '../config/env.js';
+import sendToWhatsApp from '../utils/sendToWhatsApp.js';
 
 class whatsappService {
 
@@ -10,21 +10,8 @@ class whatsappService {
                 text: { body: body },
                 //context: { message_id: messageId },
             };
-
-            const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`,{
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${config.API_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`HTTP ${response.status}: ${JSON.stringify(errorData)}`);
-            }
-            return await response.json();
-
+            await sendToWhatsApp(payload);
+            return { status: 'Message sent successfully' };
         } catch (error) {
             console.error('Error sending message to WhatsApp:', error.response ? error.response.data : error.message);
             throw error;
@@ -37,25 +24,37 @@ class whatsappService {
                 messaging_product: 'whatsapp',
                 status: 'read',
                 message_id: messageId,
-            }
-            const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`,{
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${config.API_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`HTTP ${response.status}: ${JSON.stringify(errorData)}`);
-            }
-            
-            return await response.json();
-
+            };
+            await sendToWhatsApp(payload);
+            return { status: 'Message marked as read successfully' };
         } catch (error) {
             console.error('Error marking message as read:', error.response ? error.response.data : error.message);
+            throw error;
+        }
+    }
+
+    async sendInteractiveButtons(to, BodyText, buttons) {
+        try {
+            const payload = {
+                messaging_product: 'whatsapp',
+                to: to,
+                type: 'interactive',
+                interactive: {
+                    type: 'button',
+                    body: {
+                        text: BodyText
+                    },
+                    action: {
+                        buttons: buttons
+                    }
+                }
+            };
+
+            await sendToWhatsApp(payload);
+            return { status: 'Interactive buttons sent successfully' };
+
+        } catch (error) {
+            console.error('Error sending interactive buttons:', error.response ? error.response.data : error.message);
             throw error;
         }
     }
@@ -77,24 +76,10 @@ class whatsappService {
                 }
             };
 
-            const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${config.API_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
+            await sendToWhatsApp(payload);
+            return { status: 'Interactive buttons sent successfully' };
 
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                console.error('WhatsApp API Error:', responseData);
-                throw new Error(`HTTP ${response.status}: ${JSON.stringify(responseData)}`);
-            }
-
-            return responseData;
-        }catch (error) {
+        } catch (error) {
             console.error('Error sending interactive buttons:', error.response ? error.response.data : error.message);
             throw error;
         }
@@ -126,21 +111,8 @@ class whatsappService {
               type: type,
               ...mediaObject
           };
-          const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${config.API_TOKEN}`,
-                    'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(payload)
-          });
-          
-          const responseData = await response.json();
-          if (!response.ok) {
-              console.error('WhatsApp API Error:', responseData);
-              throw new Error(`HTTP ${response.status}: ${JSON.stringify(responseData)}`);
-          }
-          return responseData;
+          await sendToWhatsApp(payload);
+          return { status: 'Media message sent successfully' };
 
       } catch (error) {
           console.error('Error sending media message:', error.response ? error.response.data : error.message);
@@ -157,23 +129,9 @@ class whatsappService {
                 contacts: [ contact ]
             };
 
-            const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${config.API_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
+            await sendToWhatsApp(payload);
+            return { status: 'Contact message sent successfully' };
 
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                console.error('WhatsApp API Error:', responseData);
-                throw new Error(`HTTP ${response.status}: ${JSON.stringify(responseData)}`);
-            }
-
-            return responseData;
         } catch (error) {
             console.error('Error sending contact message:', error.response ? error.response.data : error.message);
             throw error;
@@ -193,21 +151,8 @@ class whatsappService {
             }
         };
 
-        const response = await fetch(`${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${config.API_TOKEN}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`HTTP ${response.status}: ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
+        await sendToWhatsApp(payload);
+        return { status: 'Location message sent successfully' };
     }
 }
 

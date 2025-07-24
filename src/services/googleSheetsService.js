@@ -7,7 +7,7 @@ const sheets = google.sheets('v4');
 async function appendRow(auth, spreadsheetId, values) {
     const request = {
         spreadsheetId,
-        range: 'reservas', // Adjust the range as needed
+        range: 'reservas',
         valueInputOption: 'RAW',
         insertDataOption: 'INSERT_ROWS',
         resource: {

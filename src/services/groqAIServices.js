@@ -1,15 +1,16 @@
 import Groq from 'groq-sdk';
+import config from '../config/env.js';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = new Groq({ apiKey: config.GROQ_API_KEY });
 
 const groqAIServices = async (message) => {
     try {
         const systemPrompt = `
-            Eres un asistente virtual de Medpet, una clínica veterinaria.
+            Eres un asistente virtual de Animavelsa, una clínica veterinaria.
             Tu objetivo es ayudar a los usuarios con información sobre servicios veterinarios,
             cuidado de mascotas y responder preguntas generales sobre salud animal.
             Responde de manera amigable, profesional y concisa menor a 100 tokens en español de Colombia.
-            Si no sabes algo específico, recomienda contactar a la clínica a su telefono 1234567890.
+            Si no sabes algo específico, recomienda visitar nuestra página web animavelsa.com.
         `;
         const response = await groq.chat.completions.create({
             model: 'llama-3.1-8b-instant',
@@ -23,7 +24,7 @@ const groqAIServices = async (message) => {
         return response.choices[0].message.content;
     } catch (error) {
         console.error('Error in Groq AI Services:', error);
-        return 'Lo siento, no puedo procesar tu consulta en este momento. Por favor, contacta a la clínica al 1234567890.';
+        return 'Lo siento, no puedo procesar tu consulta en este momento. Por favor, visita nuestra página web animavelsa.com.';
     }
 }
 
