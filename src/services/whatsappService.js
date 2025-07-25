@@ -1,4 +1,4 @@
-import sendToWhatsApp from '../utils/sendToWhatsApp.js';
+import sendToWhatsApp from './httpRequest/sendToWhatsApp.js';
 
 class whatsappService {
 

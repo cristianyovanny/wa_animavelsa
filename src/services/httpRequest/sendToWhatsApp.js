@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '../../config/env.js';
 
 const sendToWhatsApp = async (data)=> {
     const url = `${config.BASE_URL}/${config.API_VERSION}/${config.BUSINESS_PHONE}/messages`;
@@ -18,3 +18,4 @@ const sendToWhatsApp = async (data)=> {
         throw error;
     }
 }
+export default sendToWhatsApp;
